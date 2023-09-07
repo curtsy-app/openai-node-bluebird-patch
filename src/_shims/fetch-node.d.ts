@@ -28,9 +28,10 @@ type _Response = unknown extends Response ? nf.Response : Response;
 type _ResponseInit = unknown extends ResponseInit ? nf.ResponseInit : ResponseInit;
 type _ResponseType =
   // @ts-ignore
-  unknown extends ResponseType ? 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect'
-  : // @ts-ignore
-    ResponseType;
+  unknown extends ResponseType
+    ? 'basic' | 'cors' | 'default' | 'error' | 'opaque' | 'opaqueredirect'
+    : // @ts-ignore
+      ResponseType;
 // @ts-ignore
 type _BodyInit = unknown extends BodyInit ? nf.BodyInit : BodyInit;
 // @ts-ignore

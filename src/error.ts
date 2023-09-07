@@ -29,13 +29,13 @@ export class APIError extends Error {
   }
 
   private static makeMessage(error: any, message: string | undefined) {
-    return (
-      error?.message ?
-        typeof error.message === 'string' ? error.message
+    return error?.message
+      ? typeof error.message === 'string'
+        ? error.message
         : JSON.stringify(error.message)
-      : error ? JSON.stringify(error)
-      : message || 'Unknown error occurred'
-    );
+      : error
+      ? JSON.stringify(error)
+      : message || 'Unknown error occurred';
   }
 
   static generate(

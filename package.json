@@ -87,6 +87,7 @@
   },
   "scripts": {
     "test": "bin/check-test-server && yarn jest",
+    "postinstall": "npm run build",
     "build": "bash ./build",
     "prepack": "echo 'to pack, run yarn build && (cd dist; yarn pack)' && exit 1",
     "prepublishOnly": "echo 'to publish, run yarn build && (cd dist; yarn publish)' && exit 1",

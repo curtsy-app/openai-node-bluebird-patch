@@ -20,6 +20,10 @@ export {
   type Uploadable,
 } from './uploads';
 
+if ((global as any).NativePromise) {
+  Promise = (global as any).NativePromise;
+}
+
 const MAX_RETRIES = 2;
 
 export type Fetch = (url: RequestInfo, init?: RequestInit) => Promise<Response>;
@@ -244,9 +248,10 @@ export abstract class APIClient {
   ): { req: RequestInit; url: string; timeout: number } {
     const { method, path, query, headers: headers = {} } = options;
 
-    const body =
-      isMultipartBody(options.body) ? options.body.body
-      : options.body ? JSON.stringify(options.body, null, 2)
+    const body = isMultipartBody(options.body)
+      ? options.body.body
+      : options.body
+      ? JSON.stringify(options.body, null, 2)
       : null;
     const contentLength = this.calculateContentLength(body);
 
@@ -311,12 +316,11 @@ export abstract class APIClient {
   ): Promise<void> {}
 
   protected parseHeaders(headers: HeadersInit | null | undefined): Record<string, string> {
-    return (
-      !headers ? {}
-      : Symbol.iterator in headers ?
-        Object.fromEntries(Array.from(headers as Iterable<string[]>).map((header) => [...header]))
-      : { ...headers }
-    );
+    return !headers
+      ? {}
+      : Symbol.iterator in headers
+      ? Object.fromEntries(Array.from(headers as Iterable<string[]>).map((header) => [...header]))
+      : { ...headers };
   }
 
   protected makeStatusError(
@@ -399,9 +403,8 @@ export abstract class APIClient {
   }
 
   buildURL<Req extends Record<string, unknown>>(path: string, query: Req | null | undefined): string {
-    const url =
-      isAbsoluteURL(path) ?
-        new URL(path)
+    const url = isAbsoluteURL(path)
+      ? new URL(path)
       : new URL(this.baseURL + (this.baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
